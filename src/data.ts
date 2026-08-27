@@ -1,10 +1,10 @@
 import type { Court, MenuItem, Product, ScheduleDay, SiteSettings, SlotStatus } from './types';
 
-export const placeholderMeta = '[PLACEHOLDER: BRAND PALETTE]';
+export const placeholderMeta = '[PLACEHOLDER: BUSINESS DETAILS; OWNER-SUPPLIED BRAND PALETTE APPLIED]';
 
 export const courts: Court[] = [
-  { id: 'c1', slug: 'court-1', name: 'Court 1', summary: 'A bright, social court prepared for friendly rallies and competitive sets.', features: ['Sample surface: cushioned acrylic', 'Sample setting: covered court', 'Sample capacity: 4 players', 'Sample amenity: courtside seating'], image: '[PLACEHOLDER: COURT 1 PHOTO]', alt: '', active: true, rateDisplay: '[PLACEHOLDER: COURT 1 RATE ₱400/HOUR]', contentStatus: 'placeholder' },
-  { id: 'c2', slug: 'court-2', name: 'Court 2', summary: 'A dedicated court with room for warm-ups, spectating, and community play.', features: ['Sample surface: cushioned acrylic', 'Sample lighting: evening ready', 'Sample capacity: 4 players', 'Sample amenity: paddle rack'], image: '[PLACEHOLDER: COURT 2 PHOTO]', alt: '', active: true, rateDisplay: '[PLACEHOLDER: COURT 2 RATE ₱400/HOUR]', contentStatus: 'placeholder' },
+  { id: 'c1', slug: 'court-1', name: 'Court 1', summary: 'A bright, social court prepared for friendly rallies and competitive sets.', features: ['Sample surface: cushioned acrylic', 'Sample setting: outdoor court', 'Sample capacity: 4 players', 'Sample amenity: courtside seating'], image: '/assets/court-1.png', alt: 'Concept image of Court 1 under evening lights with palms beyond the fence', active: true, rateDisplay: '[PLACEHOLDER: COURT 1 RATE ₱400/HOUR]', contentStatus: 'placeholder' },
+  { id: 'c2', slug: 'court-2', name: 'Court 2', summary: 'A dedicated court with room for warm-ups, spectating, and community play.', features: ['Sample surface: cushioned acrylic', 'Sample lighting: evening ready', 'Sample capacity: 4 players', 'Sample amenity: paddle rack'], image: '/assets/court-2.png', alt: 'Concept image of Court 2 with blue playing surface, seating and paddle rack', active: true, rateDisplay: '[PLACEHOLDER: COURT 2 RATE ₱400/HOUR]', contentStatus: 'placeholder' },
 ];
 
 export const menu: MenuItem[] = [
@@ -14,9 +14,9 @@ export const menu: MenuItem[] = [
 ];
 
 export const products: Product[] = [
-  { id: 'p1', name: 'Trisomy21 Club Shirt', category: 'Apparel', description: 'A comfortable club tee for match days and everyday wear.', priceDisplay: '[PLACEHOLDER: ₱599]', variants: ['Sample sizes: S–XXL', 'Sample colors: forest / cream'], image: '[PLACEHOLDER: CLUB SHIRT PHOTO]', actionType: 'inquiry', contentStatus: 'placeholder' },
-  { id: 'p2', name: 'Outdoor Pickleballs', category: 'Equipment', description: 'A sample three-ball pack for practice and open play.', priceDisplay: '[PLACEHOLDER: ₱299]', variants: ['Sample pack: 3 balls', 'Sample type: outdoor'], image: '[PLACEHOLDER: PICKLEBALL PHOTO]', actionType: 'inquiry', contentStatus: 'placeholder' },
-  { id: 'p3', name: 'Custom Net + Frame', category: 'Custom builds', description: 'A made-to-order net and sturdy frame concept for home or community courts.', priceDisplay: '[PLACEHOLDER: PRICE TO BE CONFIRMED]', variants: ['Sample scope: net + frame', 'Lead time and service area to be confirmed'], image: '[PLACEHOLDER: NET AND FRAME PHOTO]', actionType: 'quote', contentStatus: 'placeholder' },
+  { id: 'p1', name: 'Trisomy21 Club Shirt', category: 'Apparel', description: 'A comfortable club tee for match days and everyday wear.', priceDisplay: '[PLACEHOLDER: ₱599]', variants: ['Sample sizes: S–XXL', 'Sample colors: black / blue / lime'], image: '/assets/club-shirt.png', actionType: 'inquiry', contentStatus: 'placeholder' },
+  { id: 'p2', name: 'Outdoor Pickleballs', category: 'Equipment', description: 'A sample three-ball pack for practice and open play.', priceDisplay: '[PLACEHOLDER: ₱299]', variants: ['Sample pack: 3 balls', 'Sample type: outdoor'], image: '/assets/pickleballs.png', actionType: 'inquiry', contentStatus: 'placeholder' },
+  { id: 'p3', name: 'Custom Net + Frame', category: 'Custom builds', description: 'A made-to-order net and sturdy frame concept for home or community courts.', priceDisplay: '[PLACEHOLDER: PRICE TO BE CONFIRMED]', variants: ['Sample scope: net + frame', 'Lead time and service area to be confirmed'], image: '/assets/net-frame.png', actionType: 'quote', contentStatus: 'placeholder' },
 ];
 
 export const settings: SiteSettings = { hours: '[PLACEHOLDER: DAILY, 8:00 AM–10:00 PM]', address: '[PLACEHOLDER: TRISOMY21 ADDRESS]', contacts: '[PLACEHOLDER: PHONE / MESSAGE CHANNEL]', parking: '[PLACEHOLDER: PARKING AND ACCESS DETAILS]', notice: 'Website preview—availability, prices, and ordering are samples.', contentStatus: 'placeholder' };

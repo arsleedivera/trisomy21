@@ -4,7 +4,7 @@ Status: approved phase-one frontend specification, finalized for Developer hando
 
 ## Shared behavior
 
-Use semantic HTML first. Every control defines default, hover, focus-visible, pressed, disabled, loading, and error states where relevant. Focus is not hover. Primary controls use court green; secondary controls use a visible border; body links are underlined. Keep one primary action per decision group.
+Use semantic HTML first. Every control defines default, hover, focus-visible, pressed, disabled, loading, and error states where relevant. Focus is not hover. Primary controls use the approved electric blue (`primary` / `#066EE8`, with `primary-hover` / `#0054B8`); neon lime is reserved for selected, available, and sparse highlight accents. Secondary controls use a visible border; body links are underlined. Keep one primary action per decision group.
 
 All unknown content comes from searchable `[PLACEHOLDER: ...]` fixture values with `contentStatus: "placeholder"`. Components translate that state into visible “Sample content,” “Sample price,” “Price to be confirmed,” or “Photo coming soon” language. Never display an unlabeled placeholder as verified. Owner-confirmed records use `contentStatus: "verified"`.
 
