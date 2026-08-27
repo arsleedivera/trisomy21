@@ -238,3 +238,56 @@ Verdict: **PASS**
 At 375×667, the rendered browser reported `documentElement.clientWidth=360` and `scrollWidth=360` (0px global overflow). The Canteen menu track measured `clientWidth=320` and `scrollWidth=978`, confirming it remains internally horizontally scrollable. The Canteen and Shop right edges both measured 360px. The screenshot showed “Menu item 1 of 3,” Previous natively disabled, Next enabled, and the counter note stationary outside the track.
 
 This rendered evidence closes the focused containment concern. Broader gesture, screen-reader, 200% zoom, and cross-browser checks remain general deployment QA items, but no containment defect or release blocker is known.
+
+### Canteen responsive restoration QA
+
+Date: 2026-08-27  
+Verdict: **FAIL — exact 640px breakpoint conflict**
+
+- `npm run lint`: pass, exit 0.
+- `npm run typecheck`: pass, exit 0.
+- `npm run test`: pass, exit 0; 3 files and 25 tests passed.
+- `npm run build`: pass, exit 0; production assets generated successfully.
+
+#### Passing evidence
+
+- Above 640px, `.section.canteen` returns to the shared 1280px maximum and a clean `minmax(0,.8fr) / minmax(0,1.2fr)` two-column layout with bounded responsive gap. Intro, heading, copy, hours, and image remain left; the complete menu rows and counter note remain right.
+- Desktop menu wrappers are visually neutral: the track/list and slides are block-level, full width, unstyled as list chrome, with visible overflow and no snap. Each menu article returns to the established full-width grid row with transparent background and bottom divider.
+- Desktop controls are force-hidden, while JavaScript removes carousel region/slide labeling, tabindex, and mobile-only semantics when the `max-width:639px` query no longer matches.
+- At 639px and below, the previously verified localized horizontal overflow, containment, snapping, full cards, controls/status, and zero-page-overflow contract remain unchanged.
+- No changes specific to Courts or Club Essentials were introduced by the Canteen restoration block.
+
+### QA-RESP-01 — Medium — legacy mobile rules still apply at exactly 640px
+
+- Location: `src/styles.css` legacy `@media(max-width:640px)` block versus carousel/restoration boundaries at `max-width:639px` and `min-width:640px`.
+- Reproduction: render at an exact CSS viewport width of 640px.
+- Expected: because mobile carousels stop at 639px, 640px and above use the shared non-mobile section gutters and restored editorial/list/grid layouts.
+- Actual: both the legacy `max-width:640px` block and the new `min-width:640px` restoration block match. The restoration resets the Canteen grid and menu wrappers but does not reset `.section` padding, so Canteen retains the 20px mobile gutter/padding instead of the shared 32px tablet gutter. The same legacy block also keeps Courts in its one-column mobile feature layout and Club Essentials in a one-column product grid at exactly 640px even though carousel behavior is off.
+- Recommended fix: align the legacy mobile breakpoint to `max-width:639px`, or explicitly restore the shared section padding and Court/Product non-mobile layouts at `min-width:640px`. Add an exact-boundary regression assertion rather than checking only for the presence of the desktop restoration string.
+- Routing: Manager → Developer.
+
+No defect was found at 639px or above 640px. QA-RESP-01 is confined to the exact 640px overlap but blocks a clean acceptance of the specified boundary.
+
+### QA-RESP-01 remediation retest
+
+Date: 2026-08-27  
+Verdict: **PASS**
+
+- `npm run lint`: pass, exit 0.
+- `npm run typecheck`: pass, exit 0.
+- `npm run test`: pass, exit 0; 3 files and 26 tests passed.
+- `npm run build`: pass, exit 0; production assets generated successfully.
+
+#### QA-RESP-01 — Closed
+
+- No `@media(max-width:640px)` rule remains in the stylesheet. All former mobile-only layout/image rules now stop at `max-width:639px`.
+- The carousel controller uses the same `(max-width: 639px)` query, with a tested boundary helper returning mobile at 639 and non-mobile at 640.
+- At exact 640px, the `max-width:900px` tablet rule supplies shared `.section` padding of 72px vertically and 32px horizontally; the 20px mobile section gutter no longer applies.
+- The Canteen `min-width:640px` restoration supplies its two-column `minmax(0,.8fr) / minmax(0,1.2fr)` grid, neutral desktop menu wrappers, visible overflow, no snap, and hidden controls.
+- Courts retain their base two-column feature grid at 640px (with only the tablet gap adjustment), rather than the former mobile one-column override.
+- Club Essentials retains the tablet two-column product grid at 640px, rather than the former one-column mobile override.
+- JavaScript removes carousel roles, labels, track tabindex, and controls/status at 640px because the mobile query is false.
+- At 639px and below, mobile cards, localized horizontal overflow, containment, controls/status, and responsive layout rules remain unchanged.
+- Regression tests now reject any reintroduction of `max-width:640px`, assert the mobile CSS/JS boundary, verify tablet padding/restoration strings, and preserve all prior carousel tests.
+
+The exact-boundary defect is closed. No known responsive or carousel release blocker remains in static, automated, and previously supplied rendered containment evidence.

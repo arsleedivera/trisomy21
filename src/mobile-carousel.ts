@@ -1,5 +1,6 @@
 export type CarouselInput = 'button' | 'passive' | 'resize';
 export interface CarouselEnhancement { semantics: boolean; controls: boolean }
+export function isMobileCarouselWidth(width: number): boolean { return width <= 639; }
 
 export function carouselEnhancement(count: number): CarouselEnhancement {
   return count <= 0 ? { semantics: false, controls: false } : { semantics: true, controls: count > 1 };
