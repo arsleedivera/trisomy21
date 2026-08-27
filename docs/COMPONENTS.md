@@ -27,6 +27,8 @@ Render two `CourtFeature` sections, not generic cards. Each has name, image, des
 
 Do not derive extra court rules from feature, schedule, or placeholder data.
 
+At 639px and below, the two `CourtFeature` items use the shared `MobileCollectionCarousel`. Keep each image, name, details, and schedule link together in semantic source order. `CourtRules` stays outside the carousel.
+
 ## Availability explorer
 
 ### Composition
@@ -67,6 +69,8 @@ Use an editorial intro, `MenuCategory` lists, and a limited featured image grid.
 
 The action is “Order at the canteen” or “View menu,” not “Order now.” Placeholder prices render “Sample price: ₱…” or “Price to be confirmed”; missing price says “Ask at the counter,” never `₱0`. Define empty menu, unavailable item, and image-failure states.
 
+At 639px and below, individual menu items use `MobileCollectionCarousel`. Keep category, name, complete description, availability, and price visible with no line clamp. Use intrinsic card heights and top alignment so variable copy neither clips nor creates large forced empty areas. Do not create nested category carousels for the current menu.
+
 ## Shop
 
 Use `ProductList` with three merchandise stories:
@@ -78,6 +82,22 @@ Use `ProductList` with three merchandise stories:
 Product tiles may use borders and 8–12px corners but cannot nest cards. Actions open a non-transactional inquiry notice or verified contact channel. Variant controls state that inventory is not live. No cart, checkout, fake scarcity, reviews, or payment UI.
 
 Every provisional product price and variant is visibly labeled as sample. A numeric placeholder price must never appear beside purchase-like language.
+
+At 639px and below, the three Club Essentials products use `MobileCollectionCarousel`. Each card keeps image, name, complete summary/variants/sample price, and inquiry action together. At 640px and above, retain the product grid.
+
+## Mobile collection carousel
+
+`MobileCollectionCarousel` progressively enhances one ordered collection. Use a section-local region with `role="region"`, `aria-roledescription="carousel"`, and an accessible name derived from its visible section heading. Items remain `<article>` elements or `<li>` elements within a semantic list; each uses `role="group"`, `aria-roledescription="slide"`, and a positional label such as “Court 1 of 2: Court 1.” Do not apply `aria-hidden` to off-screen items; all content and actions remain available in normal reading and focus order.
+
+Place a controls row after the track. Native buttons use collection-specific labels: “Previous/Next court,” “Previous/Next menu item,” or “Previous/Next club essential.” A visible status names the current type/item and position. It may be a polite atomic live region only for Previous/Next button changes. Touch/trackpad/native scrolling updates visible status after scrolling settles without announcing every intermediate intersection; debounce settled-scroll detection.
+
+Previous/Next moves exactly one item and leaves focus on the activated button. It never focuses a card. Previous is natively disabled at item one; Next is disabled at the last item; there is no wrapping. With zero items, show the documented empty state and omit all carousel chrome. With one item, show the item and omit controls/status.
+
+Touch and trackpad use native scrolling. Keyboard users Tab through controls and native card actions in DOM order. Do not capture document ArrowLeft/ArrowRight. If the overflow track naturally needs `tabindex="0"` for discoverability, arrow keys retain native scrolling and do not move focus or selection. Use `scroll-margin-inline: 20px` so focused content and focus rings are fully visible.
+
+On resize/orientation change, recompute geometry and align the previously current item without animation. At 640px, remove carousel-only roles, chrome, and overflow behavior while exposing the same DOM items in the editorial/list/grid layout; do not maintain duplicate mobile and desktop copies.
+
+Without JavaScript, the mobile track stays horizontally scrollable and snap-enabled, and all items/actions remain usable. Hide Previous/Next and status by default until enhancement initializes. An input-neutral “Scroll for more items” instruction may remain, but it cannot be the only overflow cue.
 
 ## Visit and footer
 
@@ -115,3 +135,4 @@ Do not log names, contacts, or slot IDs to analytics by default. Future API reco
 - `CourtRules` contains exactly the two approved sentences, including punctuation.
 - Loading, empty, partial, error, offline, and image-failure states preserve layout and recovery.
 - Stable fixtures and IDs permit later API integration without changing UI behavior.
+- Mobile collection carousels preserve every item, full text, native actions, focus order, and boundary state without autoplay or looping.

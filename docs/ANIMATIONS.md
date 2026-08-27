@@ -27,6 +27,14 @@ Enter: `cubic-bezier(0.16, 1, 0.3, 1)`. Exit: `cubic-bezier(0.4, 0, 1, 1)`, 20�
 - Anchors: immediate by default; smooth scroll only for explicit anchor actions and without reduced motion.
 - Loading: delay indicator about 300ms, then restrained spinner or static placeholders; no shimmer.
 
+## Mobile carousel movement
+
+Mobile collection carousels never autoplay, loop, bounce, or advance on a timer. Direct touch/trackpad interaction uses native scrolling and CSS snap. Previous/Next activation scrolls exactly one item using native smooth scrolling only when reduced motion is not requested; keep perceived travel near or below 240ms and do not add a custom animation dependency. No fades, scaling, parallax, card entrances, or animated pagination.
+
+Focus remains on the Previous/Next button during movement. Update visible position only after scrolling settles. A live announcement is permitted once for button-initiated movement, for example “Menu item 2 of 3, Clubhouse Sandwich.” Touch, trackpad, or native keyboard scrolling updates visual status without repeated live announcements. Boundary button state updates when the settled current item changes.
+
+On resize, orientation change, the 640px breakpoint, section-anchor navigation, or current-item restoration, align content immediately without smooth scrolling. Scroll correction must not move focus or vertically shift the page.
+
 ## Hero and sections
 
 Do not stage headline, words, buttons, and image. Content appears immediately. A static court-line graphic may add energy. No parallax, autoplay video, rotating hero, marquee, animated gradient, cursor follower, scroll hijacking, or routine scroll-reveal. Any later brand entrance treatment needs Designer approval.
@@ -45,7 +53,7 @@ Status changes use text and color immediately, never color cycling. No countdown
 
 ## Reduced motion
 
-Honor `prefers-reduced-motion: reduce` globally. Remove transforms, smooth scrolling, crossfades over 100ms, and nonessential fades. Open menus/dialogs immediately or with at most 100ms opacity. Replace looping indicators with static progress text when possible. Keep focus, loading text, selection state, and announcements.
+Honor `prefers-reduced-motion: reduce` globally. Carousel Previous/Next actions use immediate `scrollTo`/`scrollIntoView` rather than smooth scrolling while retaining snap, status, and boundary feedback. Remove transforms, other smooth scrolling, crossfades over 100ms, and nonessential fades. Open menus/dialogs immediately or with at most 100ms opacity. Replace looping indicators with static progress text when possible. Keep focus, loading text, selection state, and announcements.
 
 ## Performance and QA
 
