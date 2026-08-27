@@ -117,3 +117,124 @@ The stylesheet still contains legacy declarations before the final Option A over
 The browser-control runtime remains unavailable, so responsive rendering and page overflow could not be directly observed at 375, 768, 1024, 1440, or 1920 px. Static CSS review shows bounded media, `minmax(0, ...)` hero columns, mobile stacking, scroll-contained court filters, a mobile schedule list, and a 1280px maximum content width; no definite overflow defect was found.
 
 This is an **unverified responsive signoff item, not an observed defect**. Before public deployment, visually inspect all five required widths plus 200% zoom, with particular attention to logo/header height, mobile menu, fixed CTA clearance, image crops, schedule controls, and horizontal page overflow.
+
+---
+
+## Removed feature history — floating quick links
+
+Date removed: 2026-08-27  
+Status: **REMOVED BY PRODUCT DIRECTION**
+
+The floating quick-links experiment and its feature-specific tests were removed before release. Its earlier QA findings, QA-QL-01 and QA-QL-02, had been remediated before removal; neither applies to the current product. The standard mobile “Check availability” CTA remains the active fixed navigation treatment. No quick-links browser signoff is required.
+
+---
+
+## Mobile collection carousel QA
+
+Date: 2026-08-27  
+Branch: `vercel`  
+Verdict: **FAIL — one empty-state defect; populated carousel behavior passes static/automated review; browser signoff pending**
+
+### Automated evidence
+
+- `npm run lint`: pass, exit 0.
+- `npm run typecheck`: pass, exit 0.
+- `npm run test`: pass, exit 0; 3 files and 20 tests passed.
+- `npm run build`: pass, exit 0; production assets generated successfully.
+- Carousel tests cover nearest settled index, one-step clamped movement, native boundaries, type-specific labels, track-relative targets, reduced-motion behavior, and button-only announcements.
+
+### Verified implementation evidence
+
+- Enhancement is limited to `max-width:639px`. At 640px and above, carousel roles, labels, tabindex, controls, status, and overflow styling are removed/hidden; existing court, menu, and product layouts remain.
+- Each collection uses its original articles in one DOM track. There are no clones, duplicate mobile copies, autoplay, loops, arrow-key capture, or carousel dependency.
+- Mobile CSS uses 20px outer/end gutters, a 12px gap, and `clamp(260px, calc(100vw - 64px), 340px)` cards. Cards are top-aligned with intrinsic height; full descriptions, variants, prices, availability, anchors, and actions remain untruncated inside each card.
+- Tracks use native horizontal overflow, mandatory start snapping, normal snap stop, and `touch-action:pan-x pan-y`. Native scrollbars remain visible.
+- Settled position uses the nearest leading edge with a 140ms debounce. Passive/native scrolling updates visible status silently.
+- Status, control labels, slide labels, and button-triggered announcements are type-specific for Court, Menu item, and Club essential.
+- Previous/Next moves one clamped index, retains button focus, uses native disabled boundaries, does not wrap, and never focuses a card.
+- Smooth movement is used only for button input without reduced motion. Reduced-motion and resize alignment are immediate.
+- Mobile tracks are heading-labeled carousel regions; original articles become positional slide groups. Offscreen slides are not `aria-hidden`, and actions remain in DOM focus order. Carousel-only semantics are removed at desktop widths.
+- Without JavaScript, mobile overflow and snap remain usable; controls/status are enhancement-only. One-item collections omit controls/status. Index state is retained and realigned without animation on resize/orientation configuration.
+
+### QA-CAR-01 — Medium — zero-item collection lacks an empty state and is exposed as an empty carousel
+
+- Location: `src/mobile-carousel.ts:52-67`.
+- Reproduction: initialize a `[data-carousel]` track with zero child articles at 639px or below.
+- Expected: show the collection’s documented empty state and omit carousel chrome and semantics.
+- Actual: the shared `slides.length <= 1` branch adds `role="region"` and `aria-roledescription="carousel"` even when there are zero slides, without rendering an empty-state message. Controls/status are omitted, but assistive technology encounters a named empty carousel.
+- Recommended fix: handle zero separately from one, leave carousel semantics absent, ensure the owning collection renders its type-appropriate empty state, and add zero-item regression tests.
+- Routing: Manager → Developer.
+
+### Browser verification limitation
+
+The browser-control runtime remains unavailable. QA could not directly test 375px/200% zoom rendering, 639↔640 transitions, peek/gutter measurements, vertical-versus-horizontal touch and trackpad behavior, snap settling, rapid input, native focus/disabled rendering, live announcements, intrinsic heights, orientation changes, or page overflow.
+
+These are unverified browser checks rather than additional observed defects. After QA-CAR-01 is remediated, perform hands-on testing at 375px and the 639/640 boundary, then regression-check 768, 1024, 1440, and 1920px.
+
+### QA-CAR-01 remediation retest
+
+Date: 2026-08-27  
+Verdict: **PASS WITH RENDERED-BROWSER SIGNOFF PENDING**
+
+- `npm run lint`: pass, exit 0.
+- `npm run typecheck`: pass, exit 0.
+- `npm run test`: pass, exit 0; 3 files and 22 tests passed.
+- `npm run build`: pass, exit 0; production assets generated successfully.
+
+#### QA-CAR-01 — Closed
+
+- Zero-item collections now render type-specific owning-section copy: “No courts are listed right now,” “The sample canteen menu is not available right now,” and “No club essentials are listed right now.”
+- The enhancement contract returns no carousel semantics and no controls for a zero count. Initialization removes any carousel role, roledescription, label reference, tabindex, and enhanced class, then exits without generating controls/status.
+- One-item collections remain differentiated: the single existing article receives the heading-labeled carousel region and positional slide semantics on mobile, while no Previous/Next controls or status/live-region chrome is created.
+- Populated collections retain the existing controls, settled status/announcement behavior, slide semantics, and responsive configuration.
+- Regression tests explicitly cover zero `{ semantics:false, controls:false }` and one `{ semantics:true, controls:false }`, while the prior movement, boundary, labeling, reduced-motion, and announcement tests remain passing.
+
+No known mobile-carousel implementation blocker remains in static and automated evidence. Direct browser verification at 375px/200% zoom and across the 639/640 breakpoint remains a deployment signoff limitation, not an observed defect.
+
+### Focused Canteen carousel correction
+
+Date: 2026-08-27  
+Verdict: **PASS WITH RENDERED-BROWSER SIGNOFF PENDING**
+
+- `npm run lint`: pass, exit 0.
+- `npm run typecheck`: pass, exit 0.
+- `npm run test`: pass, exit 0; 3 files and 23 tests passed.
+- `npm run build`: pass, exit 0; production assets generated successfully.
+
+#### Structure and behavior evidence
+
+- The Canteen track is a semantic `<ul>` and the carousel initializer selects only direct children marked `[data-carousel-slide]` through `:scope > [data-carousel-slide]`.
+- Every marked Canteen slide is one `<li>` containing exactly one complete `<article class="menu-item">` with category, name, full description, sample availability, and its own price.
+- The Canteen intro, heading, descriptive copy, hours, and concept image are in `.canteen-intro` before the menu track. The counter note follows the closed track and remains outside it. None can be counted or labeled as a slide.
+- Controls/status are inserted directly after the populated menu track, before the stationary counter note. With the current three menu items they expose Menu item labels/status, one-step boundary behavior, and settled button-only announcements through the shared verified implementation.
+- Empty menu rendering produces one unmarked `.collection-empty` list item, so slide count is zero and no carousel semantics or controls are added. A one-item menu produces one marked slide with region/slide semantics and no controls/status. Populated menu items receive normal controls and labels.
+- At 640px and above, mobile overflow styling does not apply, controls remain hidden, and the wrapper `<ul>` has reset list margin/padding while each full menu article retains the established desktop list-row layout.
+- Courts and Club Essentials keep their prior article markup/content and now carry only the same direct `data-carousel-slide` marker used by the generic selector; their carousel structure and behavior are otherwise unchanged.
+- The focused regression test confirms the menu track contains marked menu slides/articles, excludes Canteen intro/media/counter-note content, and precedes the counter note.
+
+No defect was found in this focused correction. Hands-on mobile/desktop rendering remains covered by the existing browser-runtime limitation rather than a new observed issue.
+
+### Canteen carousel containment retest
+
+Date: 2026-08-27  
+Verdict: **PASS**
+
+- `npm run lint`: pass, exit 0.
+- `npm run typecheck`: pass, exit 0.
+- `npm run test`: pass, exit 0; 3 files and 24 tests passed.
+- `npm run build`: pass, exit 0; production assets generated successfully.
+
+#### Independent implementation evidence
+
+- Canteen grid descendants now use `min-width:0` and `max-width:100%`, with the intro, menu list, and menu track explicitly bounded to `width:100%`. The canteen image and stationary counter note are capped to their container; long counter text may wrap instead of widening the page.
+- At 639px and below, `.collection-track` is explicitly `width:100%; max-width:100%; min-width:0; overflow-x:auto; overflow-y:hidden` with no negative right margin. Its marked slides own their clamped width and internal wrapping. The menu article is constrained to its slide.
+- No `overflow-x:hidden` is applied to `html` or `body`; page overflow is not concealed globally. The horizontal overflow remains localized to each collection track.
+- The containment rules are scoped without changing desktop display/grid declarations. At 640px and above the carousel media rules do not apply; the Canteen two-column/list presentation and product/court desktop layouts remain governed by their existing rules.
+- Courts and Club Essentials share the bounded mobile track rules and keep their prior marked articles, content, controls, and desktop layouts. No section-specific regression was found.
+- Regression tests assert the Canteen containment chain, localized `overflow-x:auto`, constrained menu item, and absence of global overflow masking.
+
+#### Rendered evidence supplied by Manager
+
+At 375×667, the rendered browser reported `documentElement.clientWidth=360` and `scrollWidth=360` (0px global overflow). The Canteen menu track measured `clientWidth=320` and `scrollWidth=978`, confirming it remains internally horizontally scrollable. The Canteen and Shop right edges both measured 360px. The screenshot showed “Menu item 1 of 3,” Previous natively disabled, Next enabled, and the counter note stationary outside the track.
+
+This rendered evidence closes the focused containment concern. Broader gesture, screen-reader, 200% zoom, and cross-browser checks remain general deployment QA items, but no containment defect or release blocker is known.

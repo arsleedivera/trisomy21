@@ -33,8 +33,6 @@ Use one landing page with anchored navigation:
 7. **Visit:** address, hours, contact, parking/access details, and a map only after location verification.
 8. **Footer:** identity, navigation, contact/social links, copyright, and preview note where needed.
 
-On mobile, a sticky “Check availability” action is allowed after the hero if it does not cover content. Desktop needs no floating CTA.
-
 ## Core journeys
 
 **Check a court:** select a date and court, inspect slots, then open an available slot. Phase one responds: “Online booking will be available soon. Contact Trisomy21 to reserve.” Offer phone/message only when verified.
@@ -109,12 +107,24 @@ Until supplied, use neutral labeled placeholders or local abstract court texture
 
 ## Responsive behavior
 
-- **375px:** one column; compact menu; scrollable date strip with affordance; one court at a time; vertical time-slot list.
+- **375px:** one column; compact menu; scrollable date strip with affordance; one court at a time; vertical time-slot list. Courts, Canteen menu items, and Club Essentials become native horizontal carousels as specified below.
 - **768px:** editorial sections may use two columns; show both courts only if cells stay at least 140px wide.
 - **1024px:** persistent nav, two-column court comparison, aligned time + two-court schedule.
 - **1440/1920px:** retain 1280px max width and add outer whitespace, not larger text.
 
 Source order remains logical. All functions work at 200% zoom without horizontal page scrolling.
+
+## Mobile collection carousels
+
+At viewport widths up to and including 639px, use one horizontal carousel each for the two Court features, Canteen menu items, and three Club Essentials shop items. At 640px and above, retain the approved editorial/list/grid layouts and hide carousel controls and status. These are browsing aids, not promotional hero carousels.
+
+Each mobile track uses the existing 20px outer gutter, a 12px gap, and cards sized `calc(100vw - 64px)`, capped at 340px and floored at 260px where the viewport permits. This leaves about 24px of the next item visible at 375px. Give the last item end padding equivalent to the gutter. Cards align at the top and use intrinsic height; never force all Canteen cards to the tallest item, fix the track height, truncate descriptions, or separate a price from its item.
+
+Use native horizontal overflow with `scroll-snap-type: x mandatory`, item `scroll-snap-align: start`, and `scroll-snap-stop: normal`. Preserve vertical page scrolling during diagonal gestures with `touch-action: pan-x pan-y`. The partial next card and controls are the primary overflow cues; do not hide the native scrollbar unless another persistent visible cue remains.
+
+Each carousel has Previous and Next buttons and visible status text such as “Court 1 of 2,” “Menu item 2 of 3,” or “Club essential 3 of 3.” The current item is the item whose leading edge is closest to the track's leading snap position after scrolling settles. No autoplay, automatic advancement, infinite loop, cloned slides, drag library, or dot-only pagination.
+
+Anchors `#courts`, `#canteen`, and `#shop` target the section heading, not an off-screen card, and preserve the current item during same-page navigation. Initial load starts at item one unless a future item-specific deep link is designed. Crossing the 640px breakpoint preserves content order; when returning to mobile, restore the most recent item where practical, otherwise reset to item one without an error announcement.
 
 ## Accessibility
 
