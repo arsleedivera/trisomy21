@@ -66,3 +66,54 @@ These states are deterministic preview hooks, so Retry intentionally repeats the
 The required in-app browser-control runtime is unavailable, so QA could not directly execute or visually inspect the page at 375, 768, 1024, 1440, or 1920 px. The same limitation applies to hands-on keyboard traversal, 200% zoom, screen-reader announcement order, computed contrast, real horizontal overflow, sticky CTA obstruction, native dialog focus behavior, and reduced-motion rendering.
 
 These are **unverified checks, not observed defects**. Before public deployment, complete a rendered browser pass at all required widths and verify keyboard focus/Escape behavior, dialogs, schedule scenarios, zoom/overflow, contrast, sticky CTA clearance, and reduced motion. Reopen QA only if that pass finds a defect.
+
+---
+
+## Option A palette and branded-imagery regression
+
+Date: 2026-08-27  
+Branch: `vercel`  
+Verdict: **PASS WITH ONE NON-BLOCKING DOCUMENTATION DEFECT AND RENDERED-BROWSER SIGNOFF PENDING**
+
+### Required gates
+
+- `npm run lint`: pass, exit 0.
+- `npm run typecheck`: pass, exit 0.
+- `npm run test`: pass, exit 0; 2 files and 13 tests passed.
+- `npm run build`: pass, exit 0; Vite produced production HTML and hashed CSS/JS assets.
+
+### Palette verification
+
+- The effective `:root` tokens match the approved Option A table in `docs/DESIGN.md`: ink `#080D15`, canvas `#F4F6F8`, surface `#FFFFFF`, surface-dark `#101A29`, line `#C8CED8`, line-dark `#334155`, muted `#525D6D`, muted-on-dark `#B8C2D1`, primary `#066EE8`, primary-hover `#0054B8`, accent-lime `#C7F000`, food-warm `#B45309`, focus `#1457D9`, and danger `#B42318`.
+- Primary actions resolve to electric blue and blue hover; the light courts, canteen, and shop use the approved canvas while header, schedule, visit, and footer use near-black framing.
+- Schedule statuses retain explicit text labels in markup and match the approved combinations: Available `#EAF7B0/#080D15/#8FB000`; Pending `#FDE7C2/#713F12/#D97706`; Booked `#E2E8F0/#334155/#64748B`; Closed `#263243/#FFFFFF/#94A3B8`.
+- Available-slot secondary text is explicitly near-black. Pending and booked secondary text inherit their approved dark foregrounds. Closed secondary text uses `muted-on-dark`, avoiding the legacy low-opacity treatment.
+- Lime surfaces use near-black text: preview bar, selected court filter, available slot, and mobile availability CTA. No implemented white-on-lime pairing was found.
+- Dark-surface supporting copy uses `muted-on-dark`, including schedule headings/labels/slot detail, visit metadata, and footer notes.
+- `food-warm` is confined to the canteen eyebrow and contained counter callout. It is not used as a section wash.
+- Global `:focus-visible` uses the approved 2px focus-blue outline, 3px offset, and 2px white separation halo, keeping focus distinct on dark and blue components.
+
+The stylesheet still contains legacy declarations before the final Option A override block, but the later declarations produce the approved computed values. This is not a functional defect; consolidation may improve maintainability in a future cleanup.
+
+### Branded imagery verification
+
+- All eight referenced PNG assets exist and are non-empty: logo, hero, two courts, canteen, club shirt, pickleballs, and net/frame.
+- Direct image decoding/inspection succeeded for the logo, hero, Court 1, canteen, shirt, pickleballs, and net/frame assets. Images consistently use the approved night-court blue/lime/near-black direction.
+- The official logo and hero artwork are labeled as official; generated venue/product imagery is visibly labeled “Concept image.” Court and product images have descriptive alternative text, while the repeated logo uses an empty image alt inside a named home link to avoid duplicate announcement.
+- CSS reserves hero, court, canteen, and product aspect ratios and uses `object-fit: cover`, reducing layout shift and inconsistent crops.
+
+### QA-PAL-01 — Low — component documentation retains superseded green-primary guidance
+
+- Severity: Low; non-blocking documentation inconsistency.
+- Location: `docs/COMPONENTS.md`, Shared behavior.
+- Reproduction: compare “Primary controls use court green” with the approved Option A palette in `docs/DESIGN.md` and the implemented blue primary token.
+- Expected: component guidance identifies electric blue/`primary` as the approved primary action color.
+- Actual: the component document still instructs future agents to use court green, while implementation and design specification use electric blue.
+- Recommended fix: Designer should update the sentence to reference `primary`/electric blue so future work does not regress the palette.
+- Routing: Manager → Designer.
+
+### Rendered-browser limitation
+
+The browser-control runtime remains unavailable, so responsive rendering and page overflow could not be directly observed at 375, 768, 1024, 1440, or 1920 px. Static CSS review shows bounded media, `minmax(0, ...)` hero columns, mobile stacking, scroll-contained court filters, a mobile schedule list, and a 1280px maximum content width; no definite overflow defect was found.
+
+This is an **unverified responsive signoff item, not an observed defect**. Before public deployment, visually inspect all five required widths plus 200% zoom, with particular attention to logo/header height, mobile menu, fixed CTA clearance, image crops, schedule controls, and horizontal page overflow.

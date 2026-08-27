@@ -67,23 +67,35 @@ The grid covers confirmed opening hours only. If unknown, visibly label demo hou
 
 ## Visual system
 
-Final colors depend on the real logo and photography. The working palette is a placeholder design system and must be marked `[PLACEHOLDER: BRAND PALETTE]` in design tokens or fixture metadata:
+The owner-supplied logo artwork establishes **Option A: Night Court Editorial** as the approved visual palette. Business details and prices remain placeholders. Near-black frames the header, schedule, footer, and selected hero treatments; the courts, canteen, and shop remain on the light canvas. Electric blue carries primary actions, while neon lime is reserved for selected and available accents and sparse highlights.
 
 | Token | Value | Purpose |
 | --- | --- | --- |
-| `ink` | `#172019` | Main text/dark surfaces |
-| `canvas` | `#F4F1E8` | Warm page background |
-| `surface` | `#FFFDF7` | Controls and schedule |
-| `line` | `#C9C8BC` | Dividers/grid |
-| `muted` | `#5E675F` | Supporting text |
-| `court` | `#176448` | Primary/action |
-| `court-dark` | `#0E4934` | Hover/pressed |
-| `ball` | `#D6F044` | Sparse highlight |
-| `clay` | `#C85B38` | Food/build accent |
-| `danger` | `#B42318` | Errors |
+| `ink` | `#080D15` | Near-black text and branded framing |
+| `canvas` | `#F4F6F8` | Light courts, canteen, and shop background |
+| `surface` | `#FFFFFF` | Light controls and raised content surfaces |
+| `surface-dark` | `#101A29` | Schedule table and dark inset surfaces |
+| `line` | `#C8CED8` | Dividers on light surfaces |
+| `line-dark` | `#334155` | Dividers and control borders on dark surfaces |
+| `muted` | `#525D6D` | Supporting text on light surfaces |
+| `muted-on-dark` | `#B8C2D1` | Supporting text on dark surfaces |
+| `primary` | `#066EE8` | Primary actions and branded emphasis |
+| `primary-hover` | `#0054B8` | Primary hover and pressed state |
+| `accent-lime` | `#C7F000` | Selected/available accents and sparse highlights |
+| `food-warm` | `#B45309` | Canteen eyebrow and contained hospitality callout |
 | `focus` | `#1457D9` | Focus ring |
+| `danger` | `#B42318` | Errors |
 
-Do not place body text on `ball`. Color never communicates status alone.
+Do not place white text or body copy on `accent-lime`; use `ink` on lime. Canteen warmth is contained to its eyebrow and callout rather than becoming a section wash. Color never communicates status alone: schedule states retain explicit text labels and use these approved combinations:
+
+| Status | Background | Text | Marker |
+| --- | --- | --- | --- |
+| Available | `#EAF7B0` | `#080D15` | `#8FB000` |
+| Pending | `#FDE7C2` | `#713F12` | `#D97706` |
+| Booked | `#E2E8F0` | `#334155` | `#64748B` |
+| Closed | `#263243` | `#FFFFFF` | `#94A3B8` |
+
+Keyboard focus uses a 2px `focus` ring with a 2–3px offset. Dark and blue components add a white separation halo so the ring remains distinct from their surface.
 
 Use a licensed/self-hosted condensed display face only if supplied. Safe stacks: `Arial Narrow, Roboto Condensed, ui-sans-serif, system-ui` for short headings and `Inter, ui-sans-serif, system-ui` for body/UI. Do not fetch fonts without approval. Hero 48/52 desktop and 36/40 mobile; H1 40/44; H2 32/38 desktop and 28/34 mobile; H3 22/28; body 16/26; UI 14/20.
 
@@ -91,7 +103,7 @@ Use a 4px spacing base: 4, 8, 12, 16, 24, 32, 48, 64, 96. Gutters: 20px at 375, 
 
 ## Imagery requirements
 
-Prefer real, consented photography. Required: logo; hero court image; one image per court; players at the venue; canteen and 2–4 signature items; shirt front/back; pickleball product; custom net/frame detail and full assembly. Reserve ratios: hero 16:10 mobile/~3:2 desktop; courts 4:3; menu/products consistently 1:1 or 4:5.
+The supplied owner artwork is the authoritative logo and hero source. Generated concept imagery now fills the court, canteen, shirt, pickleball, and net/frame slots for the proposal; each generated asset is visibly labeled “Concept image.” Replace these with real, consented venue and product photography before the purchased production release. Reserve ratios: hero 16:10 mobile/~3:2 desktop; courts and canteen 4:3; products 4:5.
 
 Until supplied, use neutral labeled placeholders or local abstract court textures—not unrelated stock. Image records use searchable values such as `[PLACEHOLDER: HERO COURT IMAGE]`, and rendered placeholders visibly say “Photo coming soon” or “Sample image.” Useful real images get descriptive alt text; decorative court lines get empty alt/CSS.
 
